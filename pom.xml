@@ -19,7 +19,7 @@
     <name>onebeartoe-tours-parent</name>
 
     <modules>
-        <module>javaj</module>
+        <module>programming-languages</module>
     </modules>
 
     <repositories>
