@@ -1,5 +1,5 @@
 
-package org.onebeartoe.tours.java.pdf;
+package org.onebeartoe.tours.pdf;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;

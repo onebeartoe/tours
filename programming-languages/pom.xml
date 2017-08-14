@@ -14,7 +14,7 @@
     
     <packaging>pom</packaging>
 
-    <name>onebeartoe-tours-parent</name>
+    <name>onebeartoe-tours-programming-languages</name>
 
     <modules>
         <module>java</module>
