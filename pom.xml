@@ -24,15 +24,7 @@
     </modules>
 
     <repositories>
-	<repository>
-            <id>oss-snapshots-repo</id>
-            <name>Sonatype OSS Maven Repository</name>
-            <url>https://repository-onebeartoe.forge.cloudbees.com/snapshot/</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-	</repository>
+
     </repositories>
 </project>
 
