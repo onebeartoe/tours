@@ -1,3 +1,13 @@
+
+/**
+ * other Calculator apps
+ * 
+ *      https://www.genuinecoder.com/calculator-javafx-source-code-tutorial-html/
+ * 
+ * 
+ *      
+ */
+
 package org.onebeartoe.tours.emojis;
 
 import javafx.application.Application;
