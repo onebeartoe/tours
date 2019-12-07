@@ -1,0 +1,7 @@
+Manifest-Version: 1.001
+AutoUpdate-Show-In-Client: true
+OpenIDE-Module: org.onebeartoe.openscad
+OpenIDE-Module-Layer: org/onebeartoe/openscad/layer.xml
+OpenIDE-Module-Localizing-Bundle: org/onebeartoe/openscad/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0000000002
+
