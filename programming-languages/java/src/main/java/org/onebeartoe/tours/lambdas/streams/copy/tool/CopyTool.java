@@ -72,7 +72,7 @@ public class CopyTool
         String outputPath = "~/Workspace/group/mom-songs/";
         
         List<String> commands = unique.stream()
-                .map( s -> "cp " + '"' + s + '"' + " " + outputPath)
+                .map( s -> "cp -r " + '"' + s + '"' + " " + outputPath)
                 .collect( Collectors.toList() );
         
         Path sortedOutpath = Paths.get("target/copy-tool/copy.sh");
