@@ -17,5 +17,7 @@ public class PoiDocuments
         // save the docs
         
         document.write(outStream);       
+        
+        outStream.close();
     }
 }

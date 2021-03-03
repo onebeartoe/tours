@@ -7,6 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -44,6 +47,18 @@ public class PoiDocumentsExamples
         assertTrue( outFile.length() > 0);
         
         System.out.println("document path = " + outFile.getAbsolutePath() );
+        
+        try (XWPFDocument doc = new XWPFDocument(
+                Files.newInputStream( outFile.toPath() ) ) )
+        {
+            // output the same as 8.1
+            List<XWPFParagraph> list = doc.getParagraphs();
+            for (XWPFParagraph paragraph : list) 
+            {
+                System.out.println(paragraph.getText());
+            }
+
+        }        
         
 //TODO: assert the file's content-type is Docx        
     }
@@ -111,13 +126,13 @@ public class PoiDocumentsExamples
         table.setBottomBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
         table.setTopBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
         
-        row1.getCell(0).setText("Left TExt");
+        row1.getCell(0).setText("Table - Left TExt");
         
         XWPFDocument tableDoc = new XWPFDocument();
         XWPFParagraph rightText = tableDoc.createParagraph();
         rightText.setAlignment(ParagraphAlignment.RIGHT);
         XWPFRun rightTextRun = rightText.createRun();
-        rightTextRun.setText("Right Text");
+        rightTextRun.setText("Table - Right Text");
         
         row1.addNewTableCell().setParagraph(rightText);
         
