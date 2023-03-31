@@ -12,10 +12,12 @@
 
     <artifactId>java</artifactId>
     
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <name>onebeartoe-tours-programming-languages-java</name>
-    
+    <modules>
+        <module>spring</module>
+    </modules>
     <dependencies>         
         <!-- https://mvnrepository.com/artifact/com.itextpdf.tool/xmlworker -->
         <dependency>
