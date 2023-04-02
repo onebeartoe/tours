@@ -18,7 +18,7 @@
 
     <version>0.1.0</version>
 
-    <name>onebeartoe-tours-java-spring-batch-fixed-length-flatfile-reader-db-writer</name>
+    <name>onebeartoe-spring-batch-fixed-length-flatfile-reader-textfile-writer</name>
 
     <description>Process a multi record type fixed length flat file.</description>
 

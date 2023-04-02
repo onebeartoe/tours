@@ -18,7 +18,7 @@
 
     <version>0.1.0</version>
 
-    <name>onebeartoe-tours-java-spring-batch-composite-item-writer</name>
+    <name>onebeartoe-spring-batch-composite-item-writer</name>
 
     <description>Process a multi record type fixed length flat file.</description>
 
