@@ -120,19 +120,19 @@ public class BatchConfiguration
 		return new PersonItemProcessor();
     }
 
-	@Bean
-	public JdbcBatchItemWriter<Person> writer(DataSource dataSource) throws SQLException 
-        {
-            System.out.println("dataSource = " + dataSource);
-            
-            JdbcBatchItemWriterBuilder<Person> jdbcBuilder = new JdbcBatchItemWriterBuilder<Person>();
-            
-		return jdbcBuilder
-			.itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
-			.sql("INSERT INTO people (first_name, last_name) VALUES (:firstName, :lastName)")
-			.dataSource(dataSource)
-			.build();
-	}
+    @Bean
+    public JdbcBatchItemWriter<Person> writer(DataSource dataSource) throws SQLException 
+    {
+        System.out.println("dataSource = " + dataSource);
+
+        JdbcBatchItemWriterBuilder<Person> jdbcBuilder = new JdbcBatchItemWriterBuilder<Person>();
+
+            return jdbcBuilder
+                    .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
+                    .sql("INSERT INTO people (first_name, last_name) VALUES (:firstName, :lastName)")
+                    .dataSource(dataSource)
+                    .build();
+    }
 
 	@Bean
 	public Job importUserJob(JobRepository jobRepository,
