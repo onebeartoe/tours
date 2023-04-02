@@ -10,14 +10,14 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 
 @Component
-public class ContactsFileRowMapper implements FieldSetMapper<Person> 
+public class CreeperFileRowMapper implements FieldSetMapper<Person>
 {
 
     @Override
     public @NonNull Person mapFieldSet(FieldSet fieldSet) 
     {
-        var first = fieldSet.readString(Fieldnames.FIRST_NAME);
-        var last = fieldSet.readString(Fieldnames.LAST_NAME);
+        var first = fieldSet.readString(CreeperFieldnames.FIRST_NAME);
+        var last = fieldSet.readString(CreeperFieldnames.LAST_NAME);
         
         Person p = new Person(first, last);
         

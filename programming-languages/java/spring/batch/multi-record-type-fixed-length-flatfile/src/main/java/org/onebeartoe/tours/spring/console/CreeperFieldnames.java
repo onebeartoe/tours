@@ -1,8 +1,9 @@
 package org.onebeartoe.tours.spring.console;
 
-public final class Fieldnames {
-
-    private Fieldnames() {
+public final class CreeperFieldnames 
+{
+    private CreeperFieldnames()
+    {
         throw new UnsupportedOperationException("Cannot initialize utility classes");
     }
 

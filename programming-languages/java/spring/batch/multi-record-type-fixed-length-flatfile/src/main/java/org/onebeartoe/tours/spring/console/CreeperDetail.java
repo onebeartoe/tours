@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.springframework.batch.item.file.transform.Range;
 
 @Getter
-public enum ContactDetail {
+public enum CreeperDetail {
 
 //    CONTACT_RECORD(new Range(1, 380)),
     FIRST_NAME(new Range(1, 3)),
@@ -25,7 +25,7 @@ public enum ContactDetail {
 
     private final Range range;
 
-    ContactDetail(Range range) {
+    CreeperDetail(Range range) {
         this.range = range;
     }
 

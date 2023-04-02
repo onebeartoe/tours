@@ -42,9 +42,7 @@ public class BatchConfiguration
     @Bean
     public FlatFileItemReader<Person> reader() 
     {
-        LineTokenizer lineTokenizer = new ContactsLineTokenizer().createLineTokenizer();
-
-        final var lineMapper = createLineMapper(lineTokenizer);
+        final var lineMapper = createLineMapper();
 
         final var logger = new ConditionalLogger();
         final var skipRecordCallback = new SkipRecordCallback(logger);
@@ -64,34 +62,56 @@ public class BatchConfiguration
         return reader;
     }            
         
-    private LineMapper<Person> createLineMapper(LineTokenizer lineTokenizer) 
+    private LineMapper<Person> createLineMapper() 
     {
 	PatternMatchingCompositeLineMapper lineMapper =
 		new PatternMatchingCompositeLineMapper();
 
+        LineTokenizer creeperTokenizer = creeperTokenizer();
+        LineTokenizer pigTokenizer = pigTokenizer();        
+        
 	Map<String, LineTokenizer> tokenizers = new HashMap<>(3);
-	tokenizers.put("USER*", userTokenizer());
-	tokenizers.put("LINEA*", lineATokenizer());
-	tokenizers.put("LINEB*", lineBTokenizer());
+	tokenizers.put("CREEPER*", creeperTokenizer);
+	tokenizers.put("PIG*", pigTokenizer);
+	lineMapper.setTokenizers(tokenizers);        
 
-	lineMapper.setTokenizers(tokenizers);
-
+        FieldSetMapper creeperFieldSetMapper = createCreeperFieldSetMapper(creeperTokenizer);
+        FieldSetMapper pigFieldSetMapper = createPigFieldSetMapper(pigTokenizer);
+        
 	Map<String, FieldSetMapper> mappers = new HashMap<>(2);
-	mappers.put("USER*", userFieldSetMapper());
-	mappers.put("LINE*", lineFieldSetMapper());
+	mappers.put("CREEPER*", creeperFieldSetMapper);
+	mappers.put("PIG*", pigFieldSetMapper);
 
 	lineMapper.setFieldSetMappers(mappers);
 
 	return lineMapper;
     }
+
+    private FieldSetMapper createCreeperFieldSetMapper(LineTokenizer lineTokenizer) 
+    {
+        final var creeperFileRowMapper = new CreeperFileRowMapper();
+        
+//        final var mapper = new DefaultLineMapper<Person>();
+//        mapper.setLineTokenizer(lineTokenizer);
+//        mapper.setFieldSetMapper(creeperFileRowMapper);
+        
+        return creeperFileRowMapper;
+    }
+    
+    private FieldSetMapper createPigFieldSetMapper(LineTokenizer pigTokenizer) 
+    {
+        final var pigFileRowMapper = new PigFileRowMapper();
+        
+        return pigFileRowMapper;        
+    }    
     
     private LineMapper<Person> createLineMapper_old(LineTokenizer lineTokenizer) 
     {
-        final var contactsFileRowMapper = new ContactsFileRowMapper();
+        final var creeperFileRowMapper = new CreeperFileRowMapper();
         
         final var mapper = new DefaultLineMapper<Person>();
         mapper.setLineTokenizer(lineTokenizer);
-        mapper.setFieldSetMapper(contactsFileRowMapper);
+        mapper.setFieldSetMapper(creeperFileRowMapper);
         
         return mapper;
     }
@@ -100,7 +120,7 @@ public class BatchConfiguration
     public PersonItemProcessor processor() 
     {
 		return new PersonItemProcessor();
-	}
+    }
 
 	@Bean
 	public JdbcBatchItemWriter<Person> writer(DataSource dataSource) throws SQLException 
@@ -137,4 +157,26 @@ public class BatchConfiguration
 			.writer(writer)
 			.build();
 	}
+
+    private LineTokenizer creeperTokenizer() 
+    {
+        LineTokenizer lineTokenizer = new CreeperLineTokenizer().createLineTokenizer();        
+        
+        return lineTokenizer;
+    }
+
+    private LineTokenizer pigTokenizer() 
+    {
+        LineTokenizer lineTokenizer = new PigLineTokenizer().createLineTokenizer();        
+        
+        return lineTokenizer;        
+    }
+
+    private FieldSetMapper creeperFieldSetMapper() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    private FieldSetMapper pigFieldSetMapper() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

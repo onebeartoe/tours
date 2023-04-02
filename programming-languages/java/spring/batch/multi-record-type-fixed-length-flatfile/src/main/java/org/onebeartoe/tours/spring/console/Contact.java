@@ -18,8 +18,8 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 @JsonPropertyOrder({
-		Fieldnames.FIRST_NAME,
-		Fieldnames.LAST_NAME
+		CreeperFieldnames.FIRST_NAME,
+		CreeperFieldnames.LAST_NAME
 //        ,
 //		Fieldnames.ADDRESS_1,
 //		Fieldnames.ADDRESS_2,
