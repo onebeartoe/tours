@@ -1,6 +1,7 @@
 
 package org.onebeartoe.tours.spring.console;
 
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -12,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * 
  *          https://spring.io/guides/gs/batch-processing/
  */
+//@EnableBatchProcessing
 @SpringBootApplication
 public class Console {
 

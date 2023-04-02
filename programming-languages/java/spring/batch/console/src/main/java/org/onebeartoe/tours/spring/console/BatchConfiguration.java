@@ -4,10 +4,13 @@ package org.onebeartoe.tours.spring.console;
 import com.example.batchprocessing.Person;
 import com.example.batchprocessing.PersonItemProcessor;
 import java.io.File;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.sql.DataSource;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
@@ -25,6 +28,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
+//@EnableBatchProcessing
 @Configuration
 public class BatchConfiguration 
 {
@@ -96,8 +100,23 @@ File infile  = new File ("src/resources/sample-data.csv");
 	}
 
 	@Bean
-	public JdbcBatchItemWriter<Person> writer(DataSource dataSource) {
-		return new JdbcBatchItemWriterBuilder<Person>()
+	public JdbcBatchItemWriter<Person> writer(DataSource dataSource) throws SQLException 
+        {
+            System.out.println("dataSource = " + dataSource);
+            
+            JdbcBatchItemWriterBuilder<Person> jdbcBuilder = new JdbcBatchItemWriterBuilder<Person>();
+            
+            Statement statement = dataSource.getConnection().createStatement();
+            String sql = "CREATE TABLE people  (\n" +
+"    person_id BIGINT IDENTITY NOT NULL PRIMARY KEY,\n" +
+"    first_name VARCHAR(20),\n" +
+"    last_name VARCHAR(20)\n" +
+");";
+            statement.execute(sql);
+            
+//            jdbcBuilder.
+            
+		return jdbcBuilder
 			.itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
 			.sql("INSERT INTO people (first_name, last_name) VALUES (:firstName, :lastName)")
 			.dataSource(dataSource)
