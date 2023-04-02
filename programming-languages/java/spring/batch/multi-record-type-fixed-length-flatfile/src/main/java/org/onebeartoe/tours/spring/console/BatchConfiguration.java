@@ -5,6 +5,8 @@ import com.example.batchprocessing.Person;
 import com.example.batchprocessing.PersonItemProcessor;
 import java.io.File;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.sql.DataSource;
 
 import org.springframework.batch.core.Job;
@@ -19,6 +21,8 @@ import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilde
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.LineMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
+import org.springframework.batch.item.file.mapping.FieldSetMapper;
+import org.springframework.batch.item.file.mapping.PatternMatchingCompositeLineMapper;
 import org.springframework.batch.item.file.transform.LineTokenizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,28 +42,50 @@ public class BatchConfiguration
     @Bean
     public FlatFileItemReader<Person> reader() 
     {
-            LineTokenizer lineTokenizer = new ContactsLineTokenizer().createLineTokenizer();
+        LineTokenizer lineTokenizer = new ContactsLineTokenizer().createLineTokenizer();
 
-final var lineMapper = createLineMapper(lineTokenizer);
+        final var lineMapper = createLineMapper(lineTokenizer);
 
-final var logger = new ConditionalLogger();
-final var skipRecordCallback = new SkipRecordCallback(logger);
+        final var logger = new ConditionalLogger();
+        final var skipRecordCallback = new SkipRecordCallback(logger);
 
-            FlatFileItemReader<Person> reader = new FlatFileItemReader<>();
+        FlatFileItemReader<Person> reader = new FlatFileItemReader<>();
 
-File pwd = new File(".")            ;
-System.out.println("pwd = " + pwd.getAbsolutePath());
-File infile  = new File ("src/main/resources/sample-data.csv");
-            reader.setResource( new FileSystemResource(infile) );
-            
-            reader.setLinesToSkip(1);
-            reader.setSkippedLinesCallback(skipRecordCallback);
-            reader.setLineMapper(lineMapper);
-                        
-            return reader;
-	}            
+        File pwd = new File(".")            ;
+        System.out.println("pwd = " + pwd.getAbsolutePath());
+        File infile  = new File ("src/main/resources/sample-data.csv");
+
+        reader.setResource( new FileSystemResource(infile) );
+
+        reader.setLinesToSkip(1);
+        reader.setSkippedLinesCallback(skipRecordCallback);
+        reader.setLineMapper(lineMapper);
+
+        return reader;
+    }            
         
     private LineMapper<Person> createLineMapper(LineTokenizer lineTokenizer) 
+    {
+	PatternMatchingCompositeLineMapper lineMapper =
+		new PatternMatchingCompositeLineMapper();
+
+	Map<String, LineTokenizer> tokenizers = new HashMap<>(3);
+	tokenizers.put("USER*", userTokenizer());
+	tokenizers.put("LINEA*", lineATokenizer());
+	tokenizers.put("LINEB*", lineBTokenizer());
+
+	lineMapper.setTokenizers(tokenizers);
+
+	Map<String, FieldSetMapper> mappers = new HashMap<>(2);
+	mappers.put("USER*", userFieldSetMapper());
+	mappers.put("LINE*", lineFieldSetMapper());
+
+	lineMapper.setFieldSetMappers(mappers);
+
+	return lineMapper;
+    }
+    
+    private LineMapper<Person> createLineMapper_old(LineTokenizer lineTokenizer) 
     {
         final var contactsFileRowMapper = new ContactsFileRowMapper();
         
@@ -68,13 +94,11 @@ File infile  = new File ("src/main/resources/sample-data.csv");
         mapper.setFieldSetMapper(contactsFileRowMapper);
         
         return mapper;
-    }        
+    }
         
-        
-
-
-	@Bean
-	public PersonItemProcessor processor() {
+    @Bean
+    public PersonItemProcessor processor() 
+    {
 		return new PersonItemProcessor();
 	}
 
