@@ -17,7 +17,11 @@ public class PigFileRowMapper implements FieldSetMapper<Person>
         var first = fieldSet.readString(PigFieldnames.ENTITY);
         var last = fieldSet.readString(PigFieldnames.OWNER);
         
+var distance = fieldSet.readString(PigFieldnames.DISTANCE);
+
         Person p = new Person(first, last);
+//TODO: set the distance on the Pig type. 
+//      p.distance = distance;        
         
         return p;
     }

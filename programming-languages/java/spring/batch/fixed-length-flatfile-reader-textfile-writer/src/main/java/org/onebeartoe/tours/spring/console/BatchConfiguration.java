@@ -14,15 +14,17 @@ import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
-import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
-import org.springframework.batch.item.database.JdbcBatchItemWriter;
-import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
+import org.springframework.batch.item.ExecutionContext;
+
+import org.springframework.batch.item.file.FlatFileItemWriter;
+
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.LineMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.mapping.PatternMatchingCompositeLineMapper;
 import org.springframework.batch.item.file.transform.LineTokenizer;
+import org.springframework.batch.item.file.transform.PassThroughLineAggregator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
@@ -41,23 +43,22 @@ public class BatchConfiguration
     @Bean
     public FlatFileItemReader<Person> reader() 
     {
-        final var lineMapper = createLineMapper();
-
         final var logger = new ConditionalLogger();
-        final var skipRecordCallback = new SkipRecordCallback(logger);
 
         FlatFileItemReader<Person> reader = new FlatFileItemReader<>();
 
         File pwd = new File(".")            ;
         System.out.println("pwd = " + pwd.getAbsolutePath());
         File infile  = new File ("src/main/resources/sample-data.csv");
-
         reader.setResource( new FileSystemResource(infile) );
 
         // do not skip any lines
         reader.setLinesToSkip(0);
         
+        final var skipRecordCallback = new SkipRecordCallback(logger);
         reader.setSkippedLinesCallback(skipRecordCallback);
+        
+        final var lineMapper = createLineMapper();
         reader.setLineMapper(lineMapper);
 
         return reader;
@@ -116,21 +117,25 @@ public class BatchConfiguration
     @Bean
     public PersonItemProcessor processor() 
     {
-		return new PersonItemProcessor();
+        return new PersonItemProcessor();
     }
 
     @Bean
-    public JdbcBatchItemWriter<Person> writer(DataSource dataSource) throws SQLException 
+    public FlatFileItemWriter<Person> writer(DataSource dataSource) throws SQLException 
     {
         System.out.println("dataSource = " + dataSource);
 
-        JdbcBatchItemWriterBuilder<Person> jdbcBuilder = new JdbcBatchItemWriterBuilder<Person>();
-
-            return jdbcBuilder
-                    .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
-                    .sql("INSERT INTO people (first_name, last_name) VALUES (:firstName, :lastName)")
-                    .dataSource(dataSource)
-                    .build();
+        FlatFileItemWriter writer = new FlatFileItemWriter();
+        
+        File outfile = new File("target/batch.output");        
+        FileSystemResource outResource = new FileSystemResource(outfile);
+        writer.setResource(outResource);
+        
+        writer.setLineAggregator(new PassThroughLineAggregator<>());
+        
+//        writer.open(new ExecutionContext() );
+        
+        return writer;
     }
 
 	@Bean
@@ -146,7 +151,7 @@ public class BatchConfiguration
 
 	@Bean
 	public Step step1(JobRepository jobRepository,
-			PlatformTransactionManager transactionManager, JdbcBatchItemWriter<Person> writer) {
+			PlatformTransactionManager transactionManager, FlatFileItemWriter<Person> writer) {
 		return new StepBuilder("step1", jobRepository)
 			.<Person, Person> chunk(10, transactionManager)
 			.reader(reader())

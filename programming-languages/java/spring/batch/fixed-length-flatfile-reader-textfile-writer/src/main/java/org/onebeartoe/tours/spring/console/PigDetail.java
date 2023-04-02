@@ -6,7 +6,7 @@ import org.springframework.batch.item.file.transform.Range;
 @Getter
 public enum PigDetail
 {
-    FIRST_NAME(new Range(1, 7)),
+    FIRST_NAME(new Range(1, 3)),
     LAST_NAME(new Range(8, 15)),
     DISTANCE(new Range(16, 18) );
 
