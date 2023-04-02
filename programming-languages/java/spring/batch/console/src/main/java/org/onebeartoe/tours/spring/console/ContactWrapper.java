@@ -2,6 +2,7 @@
 package org.onebeartoe.tours.spring.console;
 
 //import nl.craftsmen.contact.model.*;
+import com.example.batchprocessing.Person;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -27,5 +28,5 @@ public class ContactWrapper {
 	private String contactRecord;
 
 	@NotNull
-	private Contact contact;
+	private Person contact;
 }

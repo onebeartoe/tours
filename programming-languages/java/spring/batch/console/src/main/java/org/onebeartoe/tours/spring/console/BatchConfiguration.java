@@ -1,9 +1,9 @@
 
 package org.onebeartoe.tours.spring.console;
 
-import com.example.batchprocessing.JobCompletionNotificationListener;
 import com.example.batchprocessing.Person;
 import com.example.batchprocessing.PersonItemProcessor;
+import java.io.File;
 import javax.sql.DataSource;
 
 import org.springframework.batch.core.Job;
@@ -17,17 +17,17 @@ import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.LineMapper;
-import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
-import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.LineTokenizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
-public class BatchConfiguration {
+public class BatchConfiguration 
+{
 
 	// tag::readerwriterprocessor[]
 	@Bean
@@ -35,7 +35,7 @@ public class BatchConfiguration {
         {
 // the contents of this method are from:
 //         github/Manfred73/spring-batch-demo/src/main/java/nl/craftsmen/contact/job/reader/ProcessContactsFileReaderConfig.java
-String filename = "sample-data.csv";
+String filename = "/sample-data.csv";
 
 LineTokenizer lineTokenizer = new ContactsLineTokenizer().createLineTokenizer();
 
@@ -44,8 +44,15 @@ final var lineMapper = createLineMapper(lineTokenizer);
 final var logger = new ConditionalLogger();
 final var skipRecordCallback = new SkipRecordCallback(logger);
 
-            FlatFileItemReader<ContactWrapper> reader = new FlatFileItemReader<>();
-            reader.setResource(new ClassPathResource(filename));
+            FlatFileItemReader<Person> reader = new FlatFileItemReader<>();
+            
+            ClassPathResource resource = new ClassPathResource(filename);
+File pwd = new File(".")            ;
+System.out.println("pwd = " + pwd.getAbsolutePath());
+File infile  = new File ("src/resources/sample-data.csv");
+            reader.setResource( new FileSystemResource(infile) );
+//            reader.setResource( resource );
+            
             reader.setLinesToSkip(1);
             reader.setSkippedLinesCallback(skipRecordCallback);
             reader.setLineMapper(lineMapper);
@@ -55,25 +62,25 @@ final var skipRecordCallback = new SkipRecordCallback(logger);
             return reader;
 	}    
 
-	@Bean
-	public FlatFileItemReader<Person> reader_old() {
-		return new FlatFileItemReaderBuilder<Person>()
-			.name("personItemReader")
-			.resource(new ClassPathResource("sample-data.csv"))
-			.delimited()
-			.names(new String[]{"firstName", "lastName"})
-			.fieldSetMapper(new BeanWrapperFieldSetMapper<Person>() {{
-				setTargetType(Person.class);
-			}})
-			.build();
-	}        
+//	@Bean
+//	public FlatFileItemReader<Person> reader_old() {
+//		return new FlatFileItemReaderBuilder<Person>()
+//			.name("personItemReader")
+//			.resource(new ClassPathResource("sample-data.csv"))
+//			.delimited()
+//			.names(new String[]{"firstName", "lastName"})
+//			.fieldSetMapper(new BeanWrapperFieldSetMapper<Person>() {{
+//				setTargetType(Person.class);
+//			}})
+//			.build();
+//	}        
         
         
-    private LineMapper<ContactWrapper> createLineMapper(LineTokenizer lineTokenizer) 
+    private LineMapper<Person> createLineMapper(LineTokenizer lineTokenizer) 
     {
         final var contactsFileRowMapper = new ContactsFileRowMapper();
         
-        final var mapper = new DefaultLineMapper<ContactWrapper>();
+        final var mapper = new DefaultLineMapper<Person>();
         mapper.setLineTokenizer(lineTokenizer);
         mapper.setFieldSetMapper(contactsFileRowMapper);
         
