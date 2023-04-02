@@ -55,7 +55,9 @@ public class BatchConfiguration
 
         reader.setResource( new FileSystemResource(infile) );
 
-        reader.setLinesToSkip(1);
+        // do not skip any lines
+        reader.setLinesToSkip(0);
+        
         reader.setSkippedLinesCallback(skipRecordCallback);
         reader.setLineMapper(lineMapper);
 
@@ -90,10 +92,6 @@ public class BatchConfiguration
     private FieldSetMapper createCreeperFieldSetMapper(LineTokenizer lineTokenizer) 
     {
         final var creeperFileRowMapper = new CreeperFileRowMapper();
-        
-//        final var mapper = new DefaultLineMapper<Person>();
-//        mapper.setLineTokenizer(lineTokenizer);
-//        mapper.setFieldSetMapper(creeperFileRowMapper);
         
         return creeperFileRowMapper;
     }
@@ -170,13 +168,5 @@ public class BatchConfiguration
         LineTokenizer lineTokenizer = new PigLineTokenizer().createLineTokenizer();        
         
         return lineTokenizer;        
-    }
-
-    private FieldSetMapper creeperFieldSetMapper() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    private FieldSetMapper pigFieldSetMapper() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
