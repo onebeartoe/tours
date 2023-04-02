@@ -39,7 +39,7 @@ public class BatchConfiguration
         {
 // the contents of this method are from:
 //         github/Manfred73/spring-batch-demo/src/main/java/nl/craftsmen/contact/job/reader/ProcessContactsFileReaderConfig.java
-String filename = "/sample-data.csv";
+//String filename = "/sample-data.csv";
 
 LineTokenizer lineTokenizer = new ContactsLineTokenizer().createLineTokenizer();
 
@@ -50,10 +50,10 @@ final var skipRecordCallback = new SkipRecordCallback(logger);
 
             FlatFileItemReader<Person> reader = new FlatFileItemReader<>();
             
-            ClassPathResource resource = new ClassPathResource(filename);
+//            ClassPathResource resource = new ClassPathResource(filename);
 File pwd = new File(".")            ;
 System.out.println("pwd = " + pwd.getAbsolutePath());
-File infile  = new File ("src/resources/sample-data.csv");
+File infile  = new File ("src/main/resources/sample-data.csv");
             reader.setResource( new FileSystemResource(infile) );
 //            reader.setResource( resource );
             
@@ -106,13 +106,13 @@ File infile  = new File ("src/resources/sample-data.csv");
             
             JdbcBatchItemWriterBuilder<Person> jdbcBuilder = new JdbcBatchItemWriterBuilder<Person>();
             
-            Statement statement = dataSource.getConnection().createStatement();
-            String sql = "CREATE TABLE people  (\n" +
-"    person_id BIGINT IDENTITY NOT NULL PRIMARY KEY,\n" +
-"    first_name VARCHAR(20),\n" +
-"    last_name VARCHAR(20)\n" +
-");";
-            statement.execute(sql);
+//            Statement statement = dataSource.getConnection().createStatement();
+//            String sql = "CREATE TABLE people  (\n" +
+//"    person_id BIGINT IDENTITY NOT NULL PRIMARY KEY,\n" +
+//"    first_name VARCHAR(20),\n" +
+//"    last_name VARCHAR(20)\n" +
+//");";
+//            statement.execute(sql);
             
 //            jdbcBuilder.
             
