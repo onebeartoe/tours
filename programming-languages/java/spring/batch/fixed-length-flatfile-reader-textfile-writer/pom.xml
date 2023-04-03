@@ -14,7 +14,7 @@
 
     <groupId>org.onebeartoe</groupId>
 
-    <artifactId>batch-processing</artifactId>
+    <artifactId>batch-processing-textfile-writer</artifactId>
 
     <version>0.1.0</version>
 
