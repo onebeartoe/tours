@@ -14,13 +14,12 @@ import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
-import org.springframework.batch.item.ExecutionContext;
+import org.springframework.batch.item.ItemWriter;
 
 import org.springframework.batch.item.file.FlatFileItemWriter;
 
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.LineMapper;
-import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.mapping.PatternMatchingCompositeLineMapper;
 import org.springframework.batch.item.file.transform.LineTokenizer;
@@ -103,16 +102,16 @@ public class BatchConfiguration
         return pigFileRowMapper;        
     }    
     
-    private LineMapper<Person> createLineMapper_old(LineTokenizer lineTokenizer) 
-    {
-        final var creeperFileRowMapper = new CreeperFileRowMapper();
-        
-        final var mapper = new DefaultLineMapper<Person>();
-        mapper.setLineTokenizer(lineTokenizer);
-        mapper.setFieldSetMapper(creeperFileRowMapper);
-        
-        return mapper;
-    }
+//    private LineMapper<Person> createLineMapper_old(LineTokenizer lineTokenizer) 
+//    {
+//        final var creeperFileRowMapper = new CreeperFileRowMapper();
+//        
+//        final var mapper = new DefaultLineMapper<Person>();
+//        mapper.setLineTokenizer(lineTokenizer);
+//        mapper.setFieldSetMapper(creeperFileRowMapper);
+//        
+//        return mapper;
+//    }
         
     @Bean
     public PersonItemProcessor processor() 
@@ -121,7 +120,27 @@ public class BatchConfiguration
     }
 
     @Bean
-    public FlatFileItemWriter<Person> writer(DataSource dataSource) throws SQLException 
+    public ItemWriter<Person> writer(DataSource dataSource) throws SQLException 
+    {
+//        System.out.println("dataSource = " + dataSource);
+//
+//        FlatFileItemWriter writer = new FlatFileItemWriter();
+//
+//        File outfile = new File("target/batch.output");        
+//        FileSystemResource outResource = new FileSystemResource(outfile);
+//        writer.setResource(outResource);
+//        
+//        writer.setLineAggregator(new PassThroughLineAggregator<>());
+        
+        StdoutWriter<Person> stdoutWriter = new StdoutWriter<Person>();
+        stdoutWriter.setLineAggregator(new PassThroughLineAggregator<>());
+        
+        return stdoutWriter;
+    }
+    
+
+//    @Bean
+    public FlatFileItemWriter<Person> writer_old(DataSource dataSource) throws SQLException 
     {
         System.out.println("dataSource = " + dataSource);
 
@@ -133,10 +152,8 @@ public class BatchConfiguration
         
         writer.setLineAggregator(new PassThroughLineAggregator<>());
         
-//        writer.open(new ExecutionContext() );
-        
         return writer;
-    }
+    }    
 
 	@Bean
 	public Job importUserJob(JobRepository jobRepository,
@@ -151,7 +168,8 @@ public class BatchConfiguration
 
 	@Bean
 	public Step step1(JobRepository jobRepository,
-			PlatformTransactionManager transactionManager, FlatFileItemWriter<Person> writer) {
+			PlatformTransactionManager transactionManager, ItemWriter<Person> writer) 
+        {
 		return new StepBuilder("step1", jobRepository)
 			.<Person, Person> chunk(10, transactionManager)
 			.reader(reader())
