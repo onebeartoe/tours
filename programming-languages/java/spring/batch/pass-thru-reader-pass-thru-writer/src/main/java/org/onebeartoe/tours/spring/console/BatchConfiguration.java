@@ -101,18 +101,7 @@ public class BatchConfiguration
         
         return pigFileRowMapper;        
     }    
-    
-//    private LineMapper<Person> createLineMapper_old(LineTokenizer lineTokenizer) 
-//    {
-//        final var creeperFileRowMapper = new CreeperFileRowMapper();
-//        
-//        final var mapper = new DefaultLineMapper<Person>();
-//        mapper.setLineTokenizer(lineTokenizer);
-//        mapper.setFieldSetMapper(creeperFileRowMapper);
-//        
-//        return mapper;
-//    }
-        
+         
     @Bean
     public PersonItemProcessor processor() 
     {
@@ -121,17 +110,7 @@ public class BatchConfiguration
 
     @Bean
     public ItemWriter<Person> writer(DataSource dataSource) throws SQLException 
-    {
-//        System.out.println("dataSource = " + dataSource);
-//
-//        FlatFileItemWriter writer = new FlatFileItemWriter();
-//
-//        File outfile = new File("target/batch.output");        
-//        FileSystemResource outResource = new FileSystemResource(outfile);
-//        writer.setResource(outResource);
-//        
-//        writer.setLineAggregator(new PassThroughLineAggregator<>());
-        
+    {        
         StdoutWriter<Person> stdoutWriter = new StdoutWriter<Person>();
         stdoutWriter.setLineAggregator(new PassThroughLineAggregator<>());
         
@@ -140,20 +119,20 @@ public class BatchConfiguration
     
 
 //    @Bean
-    public FlatFileItemWriter<Person> writer_old(DataSource dataSource) throws SQLException 
-    {
-        System.out.println("dataSource = " + dataSource);
-
-        FlatFileItemWriter writer = new FlatFileItemWriter();
-        
-        File outfile = new File("target/batch.output");        
-        FileSystemResource outResource = new FileSystemResource(outfile);
-        writer.setResource(outResource);
-        
-        writer.setLineAggregator(new PassThroughLineAggregator<>());
-        
-        return writer;
-    }    
+//    public FlatFileItemWriter<Person> writer_old(DataSource dataSource) throws SQLException 
+//    {
+//        System.out.println("dataSource = " + dataSource);
+//
+//        FlatFileItemWriter writer = new FlatFileItemWriter();
+//        
+//        File outfile = new File("target/batch.output");        
+//        FileSystemResource outResource = new FileSystemResource(outfile);
+//        writer.setResource(outResource);
+//        
+//        writer.setLineAggregator(new PassThroughLineAggregator<>());
+//        
+//        return writer;
+//    }    
 
 	@Bean
 	public Job importUserJob(JobRepository jobRepository,
