@@ -18,6 +18,7 @@ import org.springframework.batch.item.ItemWriter;
 
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.LineMapper;
+import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.mapping.PatternMatchingCompositeLineMapper;
 import org.springframework.batch.item.file.transform.LineTokenizer;
@@ -60,31 +61,43 @@ public class BatchConfiguration
 
         return reader;
     }            
-        
-    private LineMapper<Person> createLineMapper() 
+    
+    private DefaultLineMapper<Person> createLineMapper()
     {
-	PatternMatchingCompositeLineMapper lineMapper =
-		new PatternMatchingCompositeLineMapper();
-
         LineTokenizer creeperTokenizer = creeperTokenizer();
-        LineTokenizer pigTokenizer = pigTokenizer();        
-        
-	Map<String, LineTokenizer> tokenizers = new HashMap<>(3);
-	tokenizers.put("CREEPER*", creeperTokenizer);
-	tokenizers.put("PIG*", pigTokenizer);
-	lineMapper.setTokenizers(tokenizers);        
-
         FieldSetMapper creeperFieldSetMapper = createCreeperFieldSetMapper(creeperTokenizer);
-        FieldSetMapper pigFieldSetMapper = createPigFieldSetMapper(pigTokenizer);
         
-	Map<String, FieldSetMapper> mappers = new HashMap<>(2);
-	mappers.put("CREEPER*", creeperFieldSetMapper);
-	mappers.put("PIG*", pigFieldSetMapper);
-
-	lineMapper.setFieldSetMappers(mappers);
-
-	return lineMapper;
+        final var mapper = new DefaultLineMapper<Person>();
+        mapper.setLineTokenizer(creeperTokenizer);
+        mapper.setFieldSetMapper(creeperFieldSetMapper);
+        
+        return mapper;        
     }
+    
+//    private LineMapper<Person> createLineMapper_old() 
+//    {
+//	PatternMatchingCompositeLineMapper lineMapper =
+//		new PatternMatchingCompositeLineMapper();
+//
+//        LineTokenizer creeperTokenizer = creeperTokenizer();
+//        LineTokenizer pigTokenizer = pigTokenizer();        
+//        
+//	Map<String, LineTokenizer> tokenizers = new HashMap<>(3);
+//	tokenizers.put("CREEPER*", creeperTokenizer);
+//	tokenizers.put("PIG*", pigTokenizer);
+//	lineMapper.setTokenizers(tokenizers);        
+//
+//        FieldSetMapper creeperFieldSetMapper = createCreeperFieldSetMapper(creeperTokenizer);
+//        FieldSetMapper pigFieldSetMapper = createPigFieldSetMapper(pigTokenizer);
+//        
+//	Map<String, FieldSetMapper> mappers = new HashMap<>(2);
+//	mappers.put("CREEPER*", creeperFieldSetMapper);
+//	mappers.put("PIG*", pigFieldSetMapper);
+//
+//	lineMapper.setFieldSetMappers(mappers);
+//
+//	return lineMapper;
+//    }
 
     private FieldSetMapper createCreeperFieldSetMapper(LineTokenizer lineTokenizer) 
     {
@@ -93,12 +106,12 @@ public class BatchConfiguration
         return creeperFileRowMapper;
     }
     
-    private FieldSetMapper createPigFieldSetMapper(LineTokenizer pigTokenizer) 
-    {
-        final var pigFileRowMapper = new PigFileRowMapper();
-        
-        return pigFileRowMapper;        
-    }    
+//    private FieldSetMapper createPigFieldSetMapper(LineTokenizer pigTokenizer) 
+//    {
+//        final var pigFileRowMapper = new PigFileRowMapper();
+//        
+//        return pigFileRowMapper;        
+//    }    
          
     @Bean
     public PersonItemProcessor processor() 
