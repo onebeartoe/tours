@@ -16,8 +16,6 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemWriter;
 
-import org.springframework.batch.item.file.FlatFileItemWriter;
-
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.LineMapper;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
@@ -116,46 +114,30 @@ public class BatchConfiguration
         
         return stdoutWriter;
     }
-    
 
-//    @Bean
-//    public FlatFileItemWriter<Person> writer_old(DataSource dataSource) throws SQLException 
-//    {
-//        System.out.println("dataSource = " + dataSource);
-//
-//        FlatFileItemWriter writer = new FlatFileItemWriter();
-//        
-//        File outfile = new File("target/batch.output");        
-//        FileSystemResource outResource = new FileSystemResource(outfile);
-//        writer.setResource(outResource);
-//        
-//        writer.setLineAggregator(new PassThroughLineAggregator<>());
-//        
-//        return writer;
-//    }    
+    @Bean
+    public Job importUserJob(JobRepository jobRepository,
+                    JobCompletionNotificationListener listener, Step step1)
+    {
+            return new JobBuilder("importUserJob", jobRepository)
+                    .incrementer(new RunIdIncrementer())
+                    .listener(listener)
+                    .flow(step1)
+                    .end()
+                    .build();
+    }
 
-	@Bean
-	public Job importUserJob(JobRepository jobRepository,
-			JobCompletionNotificationListener listener, Step step1) {
-		return new JobBuilder("importUserJob", jobRepository)
-			.incrementer(new RunIdIncrementer())
-			.listener(listener)
-			.flow(step1)
-			.end()
-			.build();
-	}
-
-	@Bean
-	public Step step1(JobRepository jobRepository,
-			PlatformTransactionManager transactionManager, ItemWriter<Person> writer) 
-        {
-		return new StepBuilder("step1", jobRepository)
-			.<Person, Person> chunk(10, transactionManager)
-			.reader(reader())
-			.processor(processor())
-			.writer(writer)
-			.build();
-	}
+    @Bean
+    public Step step1(JobRepository jobRepository,
+                    PlatformTransactionManager transactionManager, ItemWriter<Person> writer) 
+    {
+            return new StepBuilder("step1", jobRepository)
+                    .<Person, Person> chunk(10, transactionManager)
+                    .reader(reader())
+                    .processor(processor())
+                    .writer(writer)
+                    .build();
+    }
 
     private LineTokenizer creeperTokenizer() 
     {
