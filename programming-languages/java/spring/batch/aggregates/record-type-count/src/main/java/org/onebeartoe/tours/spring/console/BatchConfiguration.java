@@ -1,8 +1,9 @@
 
 package org.onebeartoe.tours.spring.console;
 
-import com.example.batchprocessing.Person;
 import java.io.File;
+import java.io.IOException;
+import java.io.Writer;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +15,7 @@ import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.item.file.FlatFileFooterCallback;
 
 import org.springframework.batch.item.file.FlatFileItemWriter;
 
@@ -126,11 +128,19 @@ public class BatchConfiguration
 
         FlatFileItemWriter writer = new FlatFileItemWriter();
         
-        File outfile = new File("target/batch.output");        
+        File outfile = new File("target/batch.output");
+
         FileSystemResource outResource = new FileSystemResource(outfile);
+
         writer.setResource(outResource);
         
-        writer.setLineAggregator(new PassThroughLineAggregator<>());
+        MinecraftLineAggregator aggregator = new MinecraftLineAggregator();
+               
+        writer.setLineAggregator(aggregator);
+//        writer.setLineAggregator(new PassThroughLineAggregator<>());
+ 
+
+        writer.setFooterCallback( footerCallback(aggregator) );
         
         return writer;
     }
@@ -145,6 +155,12 @@ public class BatchConfiguration
                     .flow(step1)
                     .end()
                     .build();
+    }
+    
+    private FlatFileFooterCallback footerCallback(MinecraftLineAggregator aggregator)
+    {
+        return new MinecraftFlatFileFooterCallback(aggregator);
+        
     }
 
     @Bean

@@ -1,7 +1,6 @@
 
 package org.onebeartoe.tours.spring.console;
 
-import com.example.batchprocessing.Person;
 import lombok.NonNull;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
