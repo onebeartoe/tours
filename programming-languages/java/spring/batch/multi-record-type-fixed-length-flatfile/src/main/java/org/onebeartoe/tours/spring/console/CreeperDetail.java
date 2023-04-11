@@ -6,6 +6,7 @@ import org.springframework.batch.item.file.transform.Range;
 @Getter
 public enum CreeperDetail
 {
+    CONTACT( new Range(1, 14)),
     FIRST_NAME(new Range(1, 7)),
     LAST_NAME(new Range(8, 14));
 
@@ -20,6 +21,7 @@ public enum CreeperDetail
     {
         return new Range[]
         {
+            CONTACT.getRange(),
             FIRST_NAME.getRange(),
             LAST_NAME.getRange()
         };

@@ -1,7 +1,6 @@
 
 package org.onebeartoe.tours.spring.console;
 
-import com.example.batchprocessing.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,10 +15,12 @@ public class PersonItemProcessor implements ItemProcessor<Person, Person>
     {
         final String firstName = person.getFirstName().toUpperCase();
         final String lastName = person.getLastName().toUpperCase();
+        String line = person.getLine();
 
-        final Person transformedPerson = new Person(firstName, lastName);
+        final Person transformedPerson = new Person(line, firstName, lastName);
 
-        log.info("Converting (" + person + ") into (" + transformedPerson + ")");
+        log.info("Converting (" + person + ") into (" + transformedPerson + ")" + 
+                System.lineSeparator() + "line is: " + line);
 
         return transformedPerson;
     }

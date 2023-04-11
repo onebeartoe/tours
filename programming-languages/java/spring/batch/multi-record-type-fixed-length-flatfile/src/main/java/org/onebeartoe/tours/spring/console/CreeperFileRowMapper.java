@@ -1,7 +1,6 @@
 
 package org.onebeartoe.tours.spring.console;
 
-import com.example.batchprocessing.Person;
 import lombok.NonNull;
 
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
@@ -15,10 +14,11 @@ public class CreeperFileRowMapper implements FieldSetMapper<Person>
     @Override
     public @NonNull Person mapFieldSet(FieldSet fieldSet) 
     {
+        var line = fieldSet.readString(CreeperFieldnames.CONTACT_RECORD);
         var first = fieldSet.readString(CreeperFieldnames.FIRST_NAME);
         var last = fieldSet.readString(CreeperFieldnames.LAST_NAME);
         
-        Person p = new Person(first, last);
+        Person p = new Person(line, first, last);
         
         return p;
     }

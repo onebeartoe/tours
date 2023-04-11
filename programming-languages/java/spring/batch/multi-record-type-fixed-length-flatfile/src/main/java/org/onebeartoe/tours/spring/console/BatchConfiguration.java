@@ -1,7 +1,6 @@
 
 package org.onebeartoe.tours.spring.console;
 
-import com.example.batchprocessing.Person;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.HashMap;

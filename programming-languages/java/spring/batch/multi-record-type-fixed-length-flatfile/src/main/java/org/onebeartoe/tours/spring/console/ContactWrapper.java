@@ -1,8 +1,6 @@
 
 package org.onebeartoe.tours.spring.console;
 
-//import nl.craftsmen.contact.model.*;
-import com.example.batchprocessing.Person;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

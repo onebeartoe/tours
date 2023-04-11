@@ -6,8 +6,10 @@ public final class CreeperFieldnames
     {
         throw new UnsupportedOperationException("Cannot initialize utility classes");
     }
-
-//    public static final String CONTACT_RECORD = "contactRecord";
+    
+    // the entire line, good for line length and debugging when errors occur
+    public static final String CONTACT_RECORD = "contactRecord";
+    
     public static final String FIRST_NAME = "firstName";
     public static final String LAST_NAME = "lastName";
 //    public static final String ADDRESS_1 = "address1";
@@ -27,8 +29,9 @@ public final class CreeperFieldnames
     {
         return new String[]
         {
-//            CONTACT_RECORD, 
-            FIRST_NAME, LAST_NAME
+            CONTACT_RECORD, 
+            FIRST_NAME, 
+            LAST_NAME
 //                , ADDRESS_1, ADDRESS_2, ADDRESS_3, ZIPCODE, CITY,
 //                STATE, PHONE, EMAIL, IBAN, SOCIAL_SECURITY_NUMBER, DATE_OF_DEATH, DATE_OF_BIRTH
         };
