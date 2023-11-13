@@ -17,6 +17,6 @@
     <name>onebeartoe-tours-java-spring-batch</name>
 
     <modules>
-        <module>composite-item-writer</module>
+        <!--<module>composite-item-writer</module>-->
     </modules>
 </project>
