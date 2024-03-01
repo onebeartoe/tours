@@ -6,6 +6,7 @@
     <test name="interal links Test">
         <packages>    
             <package name="org.onebeartoe.tours.jdk21"/>
+            <package name="org.onebeartoe.tours.lambdas"/>
         </packages>
     </test>    
 </suite>
