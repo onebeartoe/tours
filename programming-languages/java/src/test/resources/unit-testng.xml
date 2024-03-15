@@ -7,6 +7,7 @@
         <packages>    
             <package name="org.onebeartoe.tours.jdk21"/>
             <package name="org.onebeartoe.tours.lambdas"/>
+            <package name="org.onebeartoe.tours.lambdas.streams.cryptoquote"/>
         </packages>
     </test>    
 </suite>

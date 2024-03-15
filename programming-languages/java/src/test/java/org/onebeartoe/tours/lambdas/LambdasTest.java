@@ -1,14 +1,8 @@
 
 package org.onebeartoe.tours.lambdas;
 
-//import org.testng.annotations.Test;
-
 import static org.testng.Assert.assertNotEquals;
 import org.testng.annotations.Test;
-
-
-//import org.testng.annotations.Test;
-
 
 public class LambdasTest 
 {
