@@ -16,8 +16,8 @@
     <name>onebeartoe-tours-programming-languages</name>
 
     <modules>
+        <module>emojis</module>
         <module>java</module>
-    <module>emojis</module>
   </modules>
 
 </project>

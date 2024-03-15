@@ -1,10 +1,9 @@
 
 package org.onebeartoe.tours.lambdas.streams.cryptoquote;
 
-import org.junit.Test;
+//import org.junit.Test;
 
-//import org.testng.annotations.Test;
-
+import org.testng.annotations.Test;
 
 /**
  *

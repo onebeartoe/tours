@@ -6,11 +6,11 @@
         <artifactId>java</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <groupId>org.onebeartoe.tours.spring</groupId>
-    <artifactId>spring</artifactId>
+    <groupId>org.onebeartoe.tours.apis</groupId>
+    <artifactId>apis</artifactId>
     <packaging>pom</packaging>
-    <name>onebeartoe-tours-java-spring</name>
+    <name>onebeartoe-tours-java-apis</name>
     <modules>
-        <module>batch</module>
+        <module>jdk8</module>
     </modules>
 </project>
