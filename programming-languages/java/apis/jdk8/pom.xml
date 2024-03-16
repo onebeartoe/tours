@@ -37,12 +37,13 @@
             <scope>test</scope>
         </dependency>
         
-        <dependency>
+<!--        <dependency>
             <groupId>org.junit</groupId>
             <artifactId>junit5-api</artifactId>
             <version>5.0.0-ALPHA</version>
             <scope>test</scope>
         </dependency>
+-->
 
         <dependency>
             <groupId>org.apache.poi</groupId>
@@ -62,7 +63,30 @@
                         <suiteXmlFile>src/test/resources/unit-testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
                 </configuration>
-            </plugin>                
+            </plugin>
+
+            <plugin>
+                <!-- For usage in the Netbeans IDE see this link
+                            https://blogs.oracle.com/geertjan/jacoco,-maven,-and-netbeans 
+                -->
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.11</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>
