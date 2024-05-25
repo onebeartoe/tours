@@ -19,6 +19,7 @@
     <modules>
         <module>apis</module>
         <module>spring</module>
+        <module>javafx</module>
     </modules>
 
     <properties>
