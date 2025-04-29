@@ -20,6 +20,7 @@
         <module>apis</module>
         <module>spring</module>
         <module>javafx</module>
+        <module>decompile</module>
     </modules>
 
     <properties>
