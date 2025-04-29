@@ -1,0 +1,21 @@
+
+.title
+{
+    -fx-font-family: "minecraft";
+    -fx-font-size: 20;
+}
+
+
+Label
+{
+    -fx-font-family: "minecraft";
+    -fx-font-size: 20;
+}
+
+
+TextArea 
+{
+    -fx-font-family: "minecraft";
+    -fx-font-size: 20;
+}
+
