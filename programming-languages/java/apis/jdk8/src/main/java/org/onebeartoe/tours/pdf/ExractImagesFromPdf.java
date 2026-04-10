@@ -24,34 +24,36 @@ import org.apache.pdfbox.Loader;
 public class ExractImagesFromPdf extends PDFStreamEngine
 {
     
-// help from this anwser was provided this:
+// help from this anwser was provided by this:
 //
 //                 https://stackoverflow.com/a/63399933/803890
 
-//    private final String filePath;
-//    
+    private final String filePath;
+
     private final String outputDir;
     
     public ExractImagesFromPdf(
-//    String filePath, 
-    String outputDir)
+    
+            String filePath, 
+    
+            String outputDir)
     {
-//        this.filePath = filePath;
+        this.filePath = filePath;
         this.outputDir = outputDir;
     }
 
-
-
-
     @Override
-    protected void processOperator(Operator operator, List<COSBase> operands) throws IOException{
+    protected void processOperator(Operator operator, List<COSBase> operands) throws IOException
+    {
         String operation = operator.getName();
 
-        if("Do".equals(operation)){
+        if("Do".equals(operation))
+        {
             COSName objectName = (COSName) operands.get(0);
             PDXObject pdxObject = getResources().getXObject(objectName);
 
-            if(pdxObject instanceof PDImageXObject){
+            if(pdxObject instanceof PDImageXObject)
+            {
                 // Image
                 PDImageXObject image = (PDImageXObject) pdxObject;
                 BufferedImage bImage = image.getImage();
@@ -63,7 +65,9 @@ public class ExractImagesFromPdf extends PDFStreamEngine
                 // Write image to file
                 ImageIO.write(bImage, "PNG", outputFile);
 
-            }else if(pdxObject instanceof PDFormXObject){
+            }
+            else if(pdxObject instanceof PDFormXObject)
+            {
                 PDFormXObject form = (PDFormXObject) pdxObject;
                 showForm(form);
             }
@@ -78,24 +82,29 @@ public class ExractImagesFromPdf extends PDFStreamEngine
         
         var parent = new File(infilePath).getParentFile();
         
-        String outputDir = "target/pdf-images/";
+        String outputPath = "target/pdf-images/";
         
-        File outputDirecoty = new File(parent, outputDir);
+        File outputDirecoty = new File(parent, outputPath);
+        
         outputDirecoty.mkdirs();
 
-        ExractImagesFromPdf useCase = new ExractImagesFromPdf(
-  //              infilePath,
-                outputDir);
+        ExractImagesFromPdf app = new ExractImagesFromPdf(
+                infilePath,
+                outputDirecoty.getAbsolutePath());
         
-        try{
-            File file = new File(filePath);
+        try
+        {
+            File file = new File(app.filePath);
+            
             PDDocument document = Loader.loadPDF(file);
 
-            for(PDPage page : document.getPages()){
-                processPage(page);
+            for(PDPage page : document.getPages())
+            {
+                app.processPage(page);
             }
-
-        }catch(IOException e){
+        }
+        catch(IOException e)
+        {
             e.printStackTrace();
         }
     }
