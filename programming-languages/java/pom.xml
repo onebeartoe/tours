@@ -21,6 +21,7 @@
         <module>spring</module>
         <module>javafx</module>
         <module>decompile</module>
+        <module>tamboui</module>
     </modules>
 
     <properties>
