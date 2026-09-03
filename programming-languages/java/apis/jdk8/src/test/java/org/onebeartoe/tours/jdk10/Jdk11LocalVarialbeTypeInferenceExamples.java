@@ -1,6 +1,7 @@
 
 package org.onebeartoe.tours.jdk10;
 
+import static org.testng.AssertJUnit.assertTrue;
 import org.testng.annotations.Test;
 
 /**
@@ -15,5 +16,7 @@ public class Jdk11LocalVarialbeTypeInferenceExamples
         var s = new String("www");
         
         System.out.println(s);
+        
+        assertTrue( "www".equals(s));
     }    
 }

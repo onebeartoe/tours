@@ -5,9 +5,16 @@
 <suite name="internal link -Suite" parallel="none">
     <test name="interal links Test">
         <packages>
+            <package name="org.onebeartoe.tours.initialization"/>
+            <package name="org.onebeartoe.tours.jdk09"/>
+            <package name="org.onebeartoe.tours.jdk10"/>
+            <package name="org.onebeartoe.tours.jdk11"/>
             <package name="org.onebeartoe.tours.jdk21"/>
             <package name="org.onebeartoe.tours.lambdas"/>
             <package name="org.onebeartoe.tours.lambdas.streams.cryptoquote"/>
+            <package name="org.onebeartoe.tours.poi"/>
+            <package name="org.onebeartoe.tours.regular.expressions"/>
+            
         </packages>
     </test>    
 </suite>
