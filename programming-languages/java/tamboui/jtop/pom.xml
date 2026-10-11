@@ -4,13 +4,9 @@
   <modelVersion>4.0.0</modelVersion>
       
   <parent>
-            
     <groupId>org.onebeartoe.tours</groupId>
-            
-    <artifactId>onebeartoe-tamboui-parent</artifactId>
-            
+    <artifactId>tamboui</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-        
   </parent>
       
   <artifactId>jtop</artifactId>
