@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.onebeartoe.tours.jtop.fx.JTopController"
+            stylesheets="@jtop.css" styleClass="root-pane"
+            prefHeight="760.0" prefWidth="1080.0">
+
+    <top>
+        <HBox styleClass="header-bar" alignment="CENTER_LEFT" spacing="12">
+            <padding>
+                <Insets top="10" right="16" bottom="10" left="16"/>
+            </padding>
+            <Label text="⚡ JTop" styleClass="app-title-prefix"/>
+            <Label text="System Monitor" styleClass="app-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="btnSort" text="[s] Sort: CPU" onAction="#handleToggleSort" styleClass="action-btn"/>
+            <Button fx:id="btnCpuView" text="[c] CPU View: Bars" onAction="#handleToggleCpuView" styleClass="action-btn"/>
+            <Button fx:id="btnQuit" text="[q] Quit" onAction="#handleQuit" styleClass="quit-btn"/>
+        </HBox>
+    </top>
+
+    <center>
+        <SplitPane orientation="VERTICAL" dividerPositions="0.44" styleClass="main-split-pane">
+            <!-- Top Dashboard Section -->
+            <GridPane hgap="12" styleClass="dashboard-grid">
+                <padding>
+                    <Insets top="10" right="12" bottom="10" left="12"/>
+                </padding>
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="38" hgrow="ALWAYS"/>
+                    <ColumnConstraints percentWidth="34" hgrow="ALWAYS"/>
+                    <ColumnConstraints percentWidth="28" hgrow="ALWAYS"/>
+                </columnConstraints>
+
+                <!-- CPU Card -->
+                <VBox GridPane.columnIndex="0" styleClass="card-pane" spacing="8">
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label text="CPU" styleClass="card-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblCpuAvg" text="Avg: 0.0%" styleClass="badge-cyan"/>
+                    </HBox>
+
+                    <StackPane fx:id="cpuViewStack" VBox.vgrow="ALWAYS">
+                        <!-- Bars View -->
+                        <ScrollPane fx:id="cpuBarsScrollPane" fitToWidth="true" styleClass="metric-scroll-pane">
+                            <VBox fx:id="cpuBarsContainer" spacing="6">
+                                <padding>
+                                    <Insets top="4" right="6" bottom="4" left="2"/>
+                                </padding>
+                            </VBox>
+                        </ScrollPane>
+
+                        <!-- Sparklines View -->
+                        <ScrollPane fx:id="cpuSparklinesScrollPane" fitToWidth="true" visible="false" styleClass="metric-scroll-pane">
+                            <VBox fx:id="cpuSparklinesContainer" spacing="6">
+                                <padding>
+                                    <Insets top="4" right="6" bottom="4" left="2"/>
+                                </padding>
+                            </VBox>
+                        </ScrollPane>
+
+                        <!-- Chart View -->
+                        <VBox fx:id="cpuChartContainer" visible="false">
+                            <LineChart fx:id="cpuHistoryChart" createSymbols="false" legendVisible="false"
+                                       animated="false" VBox.vgrow="ALWAYS" styleClass="metric-chart">
+                                <xAxis>
+                                    <NumberAxis side="BOTTOM" label="Samples" autoRanging="false"
+                                                lowerBound="0" upperBound="60" tickUnit="10"/>
+                                </xAxis>
+                                <yAxis>
+                                    <NumberAxis side="LEFT" label="Load %" autoRanging="false"
+                                                lowerBound="0" upperBound="100" tickUnit="25"/>
+                                </yAxis>
+                            </LineChart>
+                        </VBox>
+                    </StackPane>
+                </VBox>
+
+                <!-- Memory Card -->
+                <VBox GridPane.columnIndex="1" styleClass="card-pane" spacing="8">
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label text="Memory" styleClass="card-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblMemRatio" text="0%" styleClass="badge-green"/>
+                    </HBox>
+
+                    <ProgressBar fx:id="memProgressBar" progress="0.0" maxWidth="Infinity" styleClass="mem-bar"/>
+
+                    <HBox alignment="CENTER_LEFT" spacing="6">
+                        <Label fx:id="lblMemDetails" text="0 KB / 0 KB" styleClass="metric-detail-text"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblSwapDetails" text="Swap: 0 KB" styleClass="metric-detail-dim"/>
+                    </HBox>
+
+                    <LineChart fx:id="memHistoryChart" createSymbols="false" legendVisible="false"
+                               animated="false" VBox.vgrow="ALWAYS" styleClass="metric-chart">
+                        <xAxis>
+                            <NumberAxis side="BOTTOM" label="Samples" autoRanging="false"
+                                        lowerBound="0" upperBound="60" tickUnit="10"/>
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis side="LEFT" label="Usage %" autoRanging="false"
+                                        lowerBound="0" upperBound="100" tickUnit="25"/>
+                        </yAxis>
+                    </LineChart>
+                </VBox>
+
+                <!-- System Card -->
+                <VBox GridPane.columnIndex="2" styleClass="card-pane" spacing="10">
+                    <Label text="System" styleClass="card-title"/>
+
+                    <GridPane vgap="10" hgap="10" VBox.vgrow="ALWAYS" styleClass="system-grid">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="48"/>
+                            <ColumnConstraints percentWidth="52"/>
+                        </columnConstraints>
+
+                        <Label text="Uptime:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="field-label"/>
+                        <Label fx:id="lblUptime" text="-" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="field-value"/>
+
+                        <Label text="Load 1m, 5m, 15m:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="field-label"/>
+                        <Label fx:id="lblLoadAvg" text="0.0, 0.0, 0.0" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="field-value"/>
+
+                        <Label text="Logical Cores:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="field-label"/>
+                        <Label fx:id="lblCores" text="-" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="field-value"/>
+
+                        <Label text="Total Memory:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="field-label"/>
+                        <Label fx:id="lblTotalMem" text="-" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="field-value"/>
+
+                        <Label text="Swap Usage:" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="field-label"/>
+                        <Label fx:id="lblSwapSummary" text="-" GridPane.rowIndex="4" GridPane.columnIndex="1" styleClass="field-value"/>
+                    </GridPane>
+                </VBox>
+            </GridPane>
+
+            <!-- Bottom Processes Section -->
+            <VBox styleClass="card-pane, processes-pane" spacing="8">
+                <padding>
+                    <Insets top="8" right="12" bottom="8" left="12"/>
+                </padding>
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label fx:id="lblProcessCount" text="Processes (0)" styleClass="card-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="lblCurrentSort" text="Sorted by: CPU" styleClass="badge-purple"/>
+                </HBox>
+
+                <TableView fx:id="processTable" VBox.vgrow="ALWAYS" styleClass="process-table">
+                    <columns>
+                        <TableColumn fx:id="colPid" text="PID" prefWidth="85"/>
+                        <TableColumn fx:id="colUser" text="USER" prefWidth="120"/>
+                        <TableColumn fx:id="colState" text="STATE" prefWidth="65"/>
+                        <TableColumn fx:id="colMem" text="MEM" prefWidth="110"/>
+                        <TableColumn fx:id="colCpu" text="CPU %" prefWidth="95"/>
+                        <TableColumn fx:id="colCommand" text="COMMAND" prefWidth="480"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </SplitPane>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER_LEFT" spacing="12" styleClass="status-bar">
+            <padding>
+                <Insets top="6" right="16" bottom="6" left="16"/>
+            </padding>
+            <Label fx:id="lblStatus" text="Active" styleClass="status-text"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="Keybindings: [c] Toggle CPU View  |  [s] Toggle Sort  |  [q] Quit" styleClass="shortcuts-text"/>
+        </HBox>
+    </bottom>
+</BorderPane>
