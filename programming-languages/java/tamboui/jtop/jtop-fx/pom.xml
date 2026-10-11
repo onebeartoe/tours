@@ -13,6 +13,8 @@
     <artifactId>jtop-fx</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
+    <name>onebeartoe-tours-tamboui-jtop-fx</name>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
@@ -91,5 +93,4 @@
             </plugin>
         </plugins>
     </build>
-    <name>onebeartoe-tours-tamboui-jtop-fx</name>
 </project>
