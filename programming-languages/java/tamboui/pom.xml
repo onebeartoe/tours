@@ -8,7 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>onebeartoe-tamboui-parent</artifactId>
+    <artifactId>tamboui</artifactId>
 
     <packaging>pom</packaging>
 
@@ -16,4 +16,5 @@
         <module>jtop</module>
         <module>filemanger</module>
     </modules>
+    <name>onebeartoe-tours-tamboui</name>
 </project>
