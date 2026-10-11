@@ -13,6 +13,8 @@
     
     <packaging>jar</packaging>
 
+    <name>onebeartoe-tours-tamboui-filemanager</name>
+
     <description>Two-panel file manager demo showcasing Tree and Node details</description>
 
     <properties>
@@ -23,12 +25,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.github.oshi</groupId>
-            <artifactId>oshi-core</artifactId>
-            <version>6.12.0</version>
-        </dependency>
-        
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -100,5 +96,4 @@
             </plugin>
         </plugins>
     </build>
-    <name>onebeartoe-tours-tamboui-filemanager</name>
 </project>
