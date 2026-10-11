@@ -22,6 +22,7 @@
         <module>javafx</module>
         <module>decompile</module>
         <module>tamboui</module>
+        <module>tamboui-parent</module>
     </modules>
 
     <properties>
