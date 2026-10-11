@@ -5,11 +5,11 @@
 
     <parent>
         <groupId>org.onebeartoe.tours</groupId>
-        <artifactId>java</artifactId>
+        <artifactId>onebeartoe-tamboui-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>onebeartoe-tours-tamboui</artifactId>
+    <artifactId>onebeartoe-tours-tamboui-filemanager</artifactId>
     
     <packaging>jar</packaging>
 
@@ -118,4 +118,5 @@
             </plugin>
         </plugins>
     </build>
+    <name>onebeartoe-tours-tamboui-filemanager</name>
 </project>
