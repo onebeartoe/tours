@@ -1,0 +1,19 @@
+
+[x]  Mouse Movement
+
+    Take a look at this JavaFX code to move a mouse and click a button.
+
+    https://github.com/onebeartoe/building-java-applications/blob/master/drinking-bird/src/main/java/org/onebeartoe/building/applications/drinking/bird/FXMLController.java
+
+    Update the code in JTopController#handleToggleMouse() in this project, 
+    to do something similar.
+
+    But instead of clicking a button, the Robot just moves the mouse with a scheduled task.
+
+    The scheduled task repeats every 10 seconds.
+
+    Pressing the 'm' key toggles the mouse movement scheduling on and off.  
+
+    Use a start and cancel TimerTask like in the FXMLController.java example.
+
+[] Some other task to implement is next.

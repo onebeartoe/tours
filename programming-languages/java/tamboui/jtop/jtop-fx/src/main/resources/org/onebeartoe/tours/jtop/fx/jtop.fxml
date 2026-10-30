@@ -184,7 +184,7 @@
             </padding>
             <Label fx:id="lblStatus" text="Active" styleClass="status-text"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Label text="Keybindings: [c] Toggle CPU View  |  [s] Toggle Sort  |  [q] Quit" styleClass="shortcuts-text"/>
+            <Label text="Keybindings: [c] Toggle CPU View  |  [s] Toggle Sort  |  [m] Toggle Mouse  |  [q] Quit" styleClass="shortcuts-text"/>
         </HBox>
     </bottom>
 </BorderPane>

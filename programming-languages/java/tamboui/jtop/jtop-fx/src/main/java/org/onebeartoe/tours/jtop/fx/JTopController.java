@@ -1,12 +1,24 @@
+
 package org.onebeartoe.tours.jtop.fx;
 
+import java.awt.AWTException;
+import java.awt.HeadlessException;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Robot;
+import java.awt.event.InputEvent;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -24,10 +36,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -35,7 +47,52 @@ import javafx.scene.paint.Color;
 /**
  * Modern JavaFX Controller for JTop.
  */
-public class JTopController {
+public class JTopController 
+{
+    private TimerTask mouseTask;
+    private TimerTask cancelTask;
+    private Timer timer;
+    private Robot robot;
+    private boolean mouseMovementScheduled = false;
+    private boolean mouseDelta = false;
+
+    @FXML
+    public void handleToggleMouse() 
+    {
+        System.out.println("m was pressed");
+
+        if (mouseMovementScheduled) 
+        {
+            cancelTask = new CancelTask();
+            cancelTask.run();
+            cancelTask.cancel();
+            mouseMovementScheduled = false;
+        } 
+        else 
+        {
+            if (mouseTask != null) 
+            {
+                mouseTask.cancel();
+            }
+            if (cancelTask != null) 
+            {
+                cancelTask.cancel();
+            }
+
+            Date firstTime = new Date();
+            mouseTask = new MouseMoveTask();
+
+            final long repeatDelay = Duration.ofSeconds(10).toMillis();
+            
+Platform.runLater(() -> 
+{            
+            getTimer().schedule(mouseTask, firstTime, repeatDelay);
+});            
+            
+            mouseMovementScheduled = true;
+            System.out.println("Mouse movement scheduled every 10 seconds.");
+        }
+    }
 
     public enum CpuViewMode {
         BARS,
@@ -112,7 +169,31 @@ public class JTopController {
         initCpuControls();
         initCharts();
         initTable();
+        initMouseMovement();
         startMetricsPolling();
+    }
+
+    private void initMouseMovement() {
+        try {
+            robot = new Robot();
+            robot.setAutoDelay(40);
+            robot.setAutoWaitForIdle(true);
+        } catch (AWTException | HeadlessException ex) {
+            Logger.getLogger(JTopController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        timer = new Timer("jtop-mouse-timer", true);
+
+        mouseTask = new MouseMoveTask();
+
+        cancelTask = new CancelTask();
+    }
+
+    private synchronized Timer getTimer() {
+        if (timer == null) {
+            timer = new Timer("jtop-mouse-timer", true);
+        }
+        return timer;
     }
 
     private void initCpuControls() {
@@ -228,8 +309,9 @@ public class JTopController {
             updateMemorySection();
             updateSystemSection();
             updateProcessSection();
-            lblStatus.setText(String.format("Updated • %d Cores • %d Processes",
-                metrics.numCpus(), metrics.processes().size()));
+            String mouseStatus = mouseMovementScheduled ? " • Mouse Mover: ON" : "";
+            lblStatus.setText(String.format("Updated • %d Cores • %d Processes%s",
+                metrics.numCpus(), metrics.processes().size(), mouseStatus));
             return null;
         });
     }
@@ -385,11 +467,19 @@ public class JTopController {
 
     public void handleKeyPressed(KeyEvent event) {
         String text = event.getText();
-        if ("s".equalsIgnoreCase(text)) {
+        if ("s".equalsIgnoreCase(text)) 
+        {
             handleToggleSort();
-        } else if ("c".equalsIgnoreCase(text)) {
+        } 
+        else if ("c".equalsIgnoreCase(text)) 
+        {
             handleToggleCpuView();
-        } else if ("q".equalsIgnoreCase(text)) {
+        }
+        else if ("m".equalsIgnoreCase(text) || event.getCode() == KeyCode.M)
+        {
+            handleToggleMouse();
+        }    
+        else if ("q".equalsIgnoreCase(text)) {
             handleQuit();
         }
     }
@@ -398,7 +488,100 @@ public class JTopController {
         if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdownNow();
         }
+        if (mouseTask != null) {
+            mouseTask.cancel();
+        }
+
+        if (cancelTask != null) {
+            cancelTask.cancel();
+        }
+        if (timer != null) {
+            timer.cancel();
+        }
     }
+
+    public boolean isMouseMovementScheduled() {
+        return mouseMovementScheduled;
+    }
+
+    public TimerTask getMouseTask() {
+        return mouseTask;
+    }
+
+    public TimerTask getCancelTask() {
+        return cancelTask;
+    }
+
+    public Robot getRobot() {
+        return robot;
+    }
+
+    public void setRobot(Robot robot) {
+        this.robot = robot;
+    }
+
+    class CancelTask extends TimerTask 
+    {
+        @Override
+        public void run() 
+        {
+            if (mouseTask != null) 
+            {
+                mouseTask.cancel();
+            }
+
+            System.out.println("The click task was canceled.");
+        }
+    }
+
+    class MouseMoveTask extends TimerTask 
+    {
+        @Override
+        public void run() 
+        {
+            if (robot == null) 
+            {
+                System.out.println("robot is null");
+            } 
+            else 
+            {
+                try 
+                {
+Platform.runLater(() -> 
+{
+                    Point p = MouseInfo.getPointerInfo() != null 
+                        ? MouseInfo.getPointerInfo().getLocation() 
+                        : null;
+                    if (p != null) 
+                    {
+System.out.println("p not null");
+                        int delta = (mouseDelta = !mouseDelta) ? 30 : -30;
+System.out.println("delta = " + delta);                        
+robot.mouseMove(p.x + delta, p.y + delta);  // did not move on Ubuntu Linux
+                        
+robot.mousePress(InputEvent.BUTTON2_MASK);
+robot.delay(100);
+robot.mouseRelease(InputEvent.BUTTON2_MASK); // be sure to release
+                    } 
+                    else 
+                    {
+System.out.println("p NULL");                        
+                        int coord = (mouseDelta = !mouseDelta) ? 100 : 101;
+                        robot.mouseMove(coord, coord);
+                    }
+                    System.out.println("Mouse moved by robot.");
+});                    
+                } 
+                catch (Exception ex) 
+                {
+                    System.out.println("Could not move mouse: " + ex.getMessage());
+                }
+            }
+        }
+    }
+
+    class ClickTask extends MouseMoveTask {}
+    class StartTask extends MouseMoveTask {}
 
     private static String formatKb(long kb) {
         if (kb < 1024) {
