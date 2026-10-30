@@ -556,7 +556,7 @@ Platform.runLater(() ->
                     {
 System.out.println("p not null");
                         int delta = (mouseDelta = !mouseDelta) ? 30 : -30;
-System.out.println("delta = " + delta);                        
+//System.out.println("delta = " + delta);                        
 robot.mouseMove(p.x + delta, p.y + delta);  // did not move on Ubuntu Linux
                         
 robot.mousePress(InputEvent.BUTTON2_MASK);
@@ -569,7 +569,7 @@ System.out.println("p NULL");
                         int coord = (mouseDelta = !mouseDelta) ? 100 : 101;
                         robot.mouseMove(coord, coord);
                     }
-                    System.out.println("Mouse moved by robot.");
+//                    System.out.println("Mouse moved by robot.");
 });                    
                 } 
                 catch (Exception ex) 
