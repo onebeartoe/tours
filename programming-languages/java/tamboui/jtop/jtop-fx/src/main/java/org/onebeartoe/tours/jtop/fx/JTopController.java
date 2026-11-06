@@ -40,7 +40,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
@@ -111,11 +110,11 @@ Platform.runLater(() ->
     // FXML Header & Controls
     @FXML private Button btnSort;
     @FXML private Button btnCpuView;
-    @FXML private Button btnQuit;
+//    @FXML private Button btnQuit;
 
     // FXML CPU Section
     @FXML private Label lblCpuAvg;
-    @FXML private StackPane cpuViewStack;
+//    @FXML private StackPane cpuViewStack;
     @FXML private ScrollPane cpuBarsScrollPane;
     @FXML private VBox cpuBarsContainer;
     @FXML private ScrollPane cpuSparklinesScrollPane;
@@ -579,9 +578,6 @@ System.out.println("p NULL");
             }
         }
     }
-
-    class ClickTask extends MouseMoveTask {}
-    class StartTask extends MouseMoveTask {}
 
     private static String formatKb(long kb) {
         if (kb < 1024) {
